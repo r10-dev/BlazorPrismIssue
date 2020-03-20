@@ -1,0 +1,39 @@
+﻿@page "/fetchdata/{measureVersionId}"
+@using Newtonsoft.Json.Linq
+
+
+<pre class="language-markup"><code class="language-json">@jsonpretty</code></pre>
+
+
+
+@code {
+    [Parameter]
+    public string measureVersionId { get; set; }
+
+    public string JsonData { get; set; }
+    public JToken jsonpretty { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+        this.SetJsonData();
+        this.jsonpretty = JsonPrettify(this.JsonData);
+    }
+
+
+
+    public static JToken JsonPrettify(string json)
+    {
+        if (string.IsNullOrEmpty(json))
+        {
+            return "[]";
+        }
+        return JToken.Parse(json);
+    }
+
+    public void SetJsonData()
+    {
+        this.JsonData = @"[{""type"":""text"",""name"":""firstName"",""validators"":{""required"":true},""ui"":{""label"":""First Name"",""placeholder"":""Enter Your First Name""}},{""type"":""select"",""name"":""country"",""ui"":{""label"":""Country"",""placeholder"":""Select...""},""validators"":{""required"":true},""source"":[{""value"":1,""text"":""India""},{""value"":2,""text"":""Canada""},{""value"":1,""text"":""USA""}]}]";
+    }
+
+}
