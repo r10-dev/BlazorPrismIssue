@@ -1,5 +1,6 @@
 ﻿@page "/fetchdata/{measureVersionId}"
 @using Newtonsoft.Json.Linq
+@inject IJSRuntime JSRuntime
 
 
 <pre class="language-markup"><code class="language-json">@jsonpretty</code></pre>
@@ -20,6 +21,13 @@
         this.jsonpretty = JsonPrettify(this.JsonData);
     }
 
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("eval", "Prism.highlightAll();");
+        }
+    }
 
 
     public static JToken JsonPrettify(string json)
